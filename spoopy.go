@@ -34,7 +34,7 @@ func downloadHandler(writer http.ResponseWriter, request *http.Request)  {
 			log.Fatal(err)
 			return
 		}
-		writer.Header().Set("Content-Disposition", path.Base(encodedUrl.Path) + ".html")
+		writer.Header().Set("Content-Disposition", "attachment; filename=" + path.Base(encodedUrl.Path) + ".html")
 	} else {
 		writer.Header().Set("Content-Disposition", resp.Header.Get("Content-Disposition") + ".html")
 	}
