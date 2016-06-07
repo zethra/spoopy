@@ -11,7 +11,7 @@ import (
 func main() {
 	http.Handle("/", http.FileServer(http.Dir(".")))
 	http.HandleFunc("/download", downloadHandler)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8082", nil)
 }
 
 func downloadHandler(writer http.ResponseWriter, request *http.Request)  {
