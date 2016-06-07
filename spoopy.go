@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"log"
 	"io"
+	"net/url"
+	"path"
 )
 
 func main() {
@@ -18,14 +20,24 @@ func downloadHandler(writer http.ResponseWriter, request *http.Request)  {
 		http.Error(writer, "Bad request", 400)
 		log.Fatal(err)
 	}
-	url := request.Form.Get("url")
-	resp, err := http.Get(url)
+	rawUrl := request.Form.Get("url")
+	resp, err := http.Get(rawUrl)
 	if err != nil {
 		http.Error(writer, "Could not retrive file", 500)
 		log.Fatal(err)
+		return
 	}
-	log.Println(resp.Header.Get("Content-Disposition"))
-	writer.Header().Set("Content-Disposition", resp.Header.Get("Content-Disposition") + ".html")
+	if resp.Header.Get("Content-Disposition") == "" {
+		encodedUrl, err := url.Parse(rawUrl)
+		if err != nil {
+			http.Error(writer, "Could not retrive file", 500)
+			log.Fatal(err)
+			return
+		}
+		writer.Header().Set("Content-Disposition", path.Base(encodedUrl.Path) + ".html")
+	} else {
+		writer.Header().Set("Content-Disposition", resp.Header.Get("Content-Disposition") + ".html")
+	}
 	writer.Header().Set("Content-Type", "text/html")
 	io.Copy(writer, resp.Body)
 }
