@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 dir="/home/ubuntu/spoopy"
-cmd="spoopy"
+cmd="./spoopy"
 user="ubuntu"
 
 name=`basename $0`
