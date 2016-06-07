@@ -24,6 +24,7 @@ func downloadHandler(writer http.ResponseWriter, request *http.Request)  {
 		http.Error(writer, "Could not retrive file", 500)
 		log.Fatal(err)
 	}
+	log.Println(resp.Header.Get("Content-Disposition"))
 	writer.Header().Set("Content-Disposition", resp.Header.Get("Content-Disposition") + ".html")
 	writer.Header().Set("Content-Type", "text/html")
 	io.Copy(writer, resp.Body)
